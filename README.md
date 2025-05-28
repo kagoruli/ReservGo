@@ -65,14 +65,4 @@ TECNOLOGÍAS UTILIZADAS
 - JDBC para conexión a base de datos  
 - JCalendar para selección de fechas  
 
-DOCUMENTACIÓN ADICIONAL  
-El proyecto incluye:  
-- Diagramas de interacción de sistemas  
-- Scripts SQL para creación de la base de datos  
-- Imágenes de prueba de ejecución  
-- Videos demostrativos (enlaces proporcionados)  
-
-ENLACES IMPORTANTES  
-- Diagrama de interacción  
-- [Repositorio GitHub](link del proyecto en GitHub)  
-- [Copia en Drive](link del proyecto en drive)  
+ 
