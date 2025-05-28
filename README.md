@@ -1,0 +1,65 @@
+create schema resergo;
+use resergo;
+CREATE TABLE usuarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    rol ENUM('ADMIN', 'CLIENTE') NOT NULL
+);
+INSERT INTO usuarios (usuario, contrasena, rol) VALUES 
+('admin', 'admin123', 'ADMIN'),
+('cliente', 'cliente123', 'CLIENTE');
+
+-- Tabla para clientes
+CREATE TABLE clientes (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    nombre_completo VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla para administradores
+CREATE TABLE administradores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    nombre_completo VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE reservas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_cliente VARCHAR(50) NOT NULL,
+    nombre_cliente VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    fecha_entrada DATE NOT NULL,
+    fecha_salida DATE NOT NULL,
+    referencia_pago VARCHAR(20) UNIQUE NOT NULL,
+    estado ENUM('PENDIENTE', 'CONFIRMADA', 'CANCELADA') DEFAULT 'PENDIENTE',
+    fecha_reserva TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_cliente) REFERENCES usuarios(usuario)
+);
+-- Tabla de habitaciones
+CREATE TABLE habitaciones (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    numero_habitacion VARCHAR(10) NOT NULL UNIQUE,
+    tipo ENUM('INDIVIDUAL', 'DOBLE', 'SUITE', 'FAMILIAR') NOT NULL,
+    capacidad INT NOT NULL,
+    precio_por_noche DECIMAL(10,2) NOT NULL,
+    estado ENUM('DISPONIBLE', 'OCUPADA', 'MANTENIMIENTO') DEFAULT 'DISPONIBLE',
+    descripcion TEXT,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Insertar habitaciones de ejemplo
+INSERT INTO habitaciones (numero_habitacion, tipo, capacidad, precio_por_noche, descripcion) VALUES
+('101', 'INDIVIDUAL', 1, 800.00, 'Habitación individual con vista al jardín'),
+('102', 'INDIVIDUAL', 1, 800.00, 'Habitación individual con vista al jardín'),
+('201', 'DOBLE', 2, 1200.00, 'Habitación doble con cama matrimonial'),
+('202', 'DOBLE', 2, 1200.00, 'Habitación doble con dos camas individuales'),
+('301', 'SUITE', 4, 2000.00, 'Suite presidencial con jacuzzi'),
+('401', 'FAMILIAR', 6, 1800.00, 'Habitación familiar con litera y sofá cama');
+-- Agregar columna de habitación a la tabla reservas
+ALTER TABLE reservas ADD COLUMN habitacion_id INT;
+ALTER TABLE reservas ADD FOREIGN KEY (habitacion_id) REFERENCES habitaciones(id);
